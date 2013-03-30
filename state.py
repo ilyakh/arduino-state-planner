@@ -89,9 +89,12 @@ if __name__ == "__main__":
         for n in g.nodes():
             node_labels[n] = n.description
 
-        nx.draw_networkx_labels(g, pos, node_labels, label_pos=-1, font_size=16)
+        nx.draw_networkx_labels(g, pos, node_labels,
+                                label_pos=-1, font_size=16)
 
-        nx.draw_networkx_nodes(g, pos, node_shape="o", node_color="b", linewidths=2.0)
+        #nx.draw_networkx_nodes(g, pos,
+        #                       node_shape="o", node_color="b", linewidths=2.0,
+        #                       node_size=1900, alpha=0.5)
         nx.draw_networkx_edges(g, pos, width=2)
 
         pp.draw()
