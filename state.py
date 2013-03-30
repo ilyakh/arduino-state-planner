@@ -54,9 +54,14 @@ class State:
     def __repr__( self ):
         return self.__str__()
 
-    def __lt__( self, other ):
-        self.graph.add_edge( self, other )
-        return other
+    def __gt__( self, other ):
+        try:
+            for n in other:
+                self.graph.add_edge( self, n )
+            return None
+        except TypeError:
+            other.graph.add_edge( self, other )
+            return other
 
 
 
@@ -66,24 +71,40 @@ if __name__ == "__main__":
     states = [
         State( "Wait for event" ),
         State( "React to button" ), State( "Timeout" ),
-        State( "Turn off" ) ]
+        State( "Turn off" ),
+        State( "Ask for confirmation" ),
+        State( "Power off" )
+    ]
 
     p = Program( states )
 
 
+    # list states
     for s in p:
         print s
+
+
 
     p["Start"] > p["Wait for event"]
     p["Wait for event"] > p["Timeout"]
     p["Wait for event"] > p["React to button"] > p["Wait for event"]
-    p["Timeout"] > p["Turn off"]
     # p["React to button"] > p["Wait for event"]
+    p["Timeout"] > p["Turn off"]
+
+
+    p['Turn off'] > (
+        p["Ask for confirmation"],
+        p["Power off"]
+    )
+
+
+
+
 
     def draw(g):
         import matplotlib.pyplot as pp
 
-        pos=nx.layout.spectral_layout(g)
+        pos=nx.layout.random_layout(g)
 
         node_labels = {}
         for n in g.nodes():
